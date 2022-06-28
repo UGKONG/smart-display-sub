@@ -1,0 +1,15 @@
+{
+  "id": 1,
+  "loadURL": "http://localhost",
+  "requestURL": "http://smartpole.enwiser.com",
+  "autoPage": true,
+  "pageTime": 5,
+  "timeSet": {
+    "date": 5,
+    "data": 60
+  },
+  "serial": {
+    "path": "COM3",
+    "baudRate": 9600
+  }
+}

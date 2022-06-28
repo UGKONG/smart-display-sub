@@ -1,0 +1,97 @@
+import React from "react";
+import Styled from 'styled-components';
+import useAxios from "%/useAxios";
+import useDelay from '%/useDelay';
+import Header from "./Header";
+
+const App = () => {
+  const [isConnect, setIsConnect] = React.useState(false);
+  const [isSerialConnect, setIsSerialConnect] = React.useState(false);
+  const [isSerialOn, setIsSerialOn] = React.useState(false);
+  const [clicked, setClicked] = React.useState(false);
+  const [clickTimer, setClickTimer] = React.useState(5);
+
+  const connectCheck = () => {
+    useAxios.get('/isConnect').then(({ data }) => {
+      if (typeof(data) !== 'boolean') return setIsConnect(false);
+      setIsConnect(data);
+    }).catch(() => {
+      setIsConnect(false);
+    });
+  }
+  const serialConnectCheck = () => {
+    useAxios.get('/isSerialConnect').then(({ data }) => {
+      if (typeof(data) !== 'boolean') return setIsSerialConnect(false);
+      setIsSerialConnect(data);
+    }).catch(() => {
+      setIsSerialConnect(false);
+    })
+  }
+  const isSerialOnCheck = () => {
+    useAxios.get('/isSerialOn').then(
+      ({ data }) => {
+        if (typeof(data) !== 'boolean') return setIsSerialOn(false);
+        setIsSerialOn(data);
+      }
+    ).catch(
+      () => setIsSerialOn(false)
+    );
+  }
+  const clickDelay = () => {
+    setClicked(true);
+    useDelay(1000).then(() => {
+      setClickTimer(4);
+      useDelay(1000).then(() => {
+        setClickTimer(3);
+        useDelay(1000).then(() => {
+          setClickTimer(2);
+          useDelay(1000).then(() => {
+            setClickTimer(1);
+            useDelay(1000).then(() => {
+              setClickTimer(5);
+              setClicked(false);
+            });
+          });
+        });
+      });
+    });
+  }
+  const on = () => {
+    clickDelay();
+    useAxios.get('/serialPortOn').then(({data}) => {isSerialOnCheck();console.log(data)});
+  }
+  const off = () => {
+    clickDelay();
+    useAxios.get('/serialPortOff').then(({data}) => {isSerialOnCheck();console.log(data)});
+  }
+
+  React.useEffect(() => {
+    connectCheck();
+    serialConnectCheck();
+  }, []);
+
+  React.useEffect(() => {
+    setInterval(isSerialOnCheck, 1000);
+  }, []);
+
+  return (
+    <Main>
+      <Header />
+      클라이언트: 준비됨<br />
+      서버: {isConnect ? '연결됨' : '연결안됨'}<br />
+      아두이노: {isSerialConnect ? '연결됨' : '연결안됨'}<br />
+      아두이노 전원 : {isSerialOn ? 'ON' : 'OFF'}<br />
+      <Button disabled={clicked} onClick={on}>ON {clicked && '(' + clickTimer + ')'}</Button>
+      <Button disabled={clicked} onClick={off}>OFF {clicked && '(' + clickTimer + ')'}</Button>
+      
+    </Main>
+  )
+}
+
+export default App;
+
+const Main = Styled.main``;
+const Button = Styled.button`
+  padding: 4px 14px;
+  margin-right: 8px;
+`;

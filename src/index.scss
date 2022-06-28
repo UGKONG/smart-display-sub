@@ -1,0 +1,133 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@mixin flex ($justify: flex-start, $align: center, $flow: row) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+  flex-flow: $flow;
+}
+@mixin wrap () {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+@mixin font($size: 14px, $weight: 500, $color: #fff, $spacing: 1px, $align: left) {
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  letter-spacing: $spacing;
+  text-align: $align;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  user-select: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+html, body, #root {
+  @include wrap();
+  // background-color: rgb(43, 42, 42);
+  background-color: #fff;
+  // color: #fff;
+  color: #333;
+}
+main {
+  @include wrap();
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+
+  & > section {
+    @include wrap();
+    @include flex(flex-start, center, column);
+
+    & > h1 {
+      @include flex(center, center);
+      @include font(24px, 700, null, 3px, center);
+      height: 70px;
+    }
+
+    & > h2 {
+      @include font(14px, 500, null, 1px, center);
+      height: 20px;
+    }
+
+    & > div {
+      @include flex(space-around, center, column);
+      width: 100%;
+      height: calc(100% - 90px);
+      padding: 10px 15px 15px;
+      overflow: hidden;
+
+      & > p {
+        @include flex(space-around, center);
+        width: 100%;
+        font-size: 14px;
+        & > span {
+          text-align: center;
+        }
+      }
+    }
+
+    // 현재상태
+    &.now {
+      span {
+        width: 50%;
+      }
+    }
+    
+    // 오늘날씨, 내일날씨
+    &.today, &.tomorrow {
+      & p > span {
+        &:first-of-type {
+          width: 40%;
+        }
+        &:last-of-type {
+          @include flex(center, center);
+          width: 60%;
+          padding-left: 10px;
+          & > span {
+            width: 40%;
+          }
+        }
+      }
+    }
+
+    // 중기날씨
+    &.week {
+      p > span {
+        font-size: 13px;
+
+        &:nth-of-type(1) {
+          width: 30%;
+        }
+        &:nth-of-type(2) {
+          width: 25%;
+        }
+        &:nth-of-type(3) {
+          width: 33%;
+        }
+        &:nth-of-type(4) {
+          width: 27%;
+        }
+        small {
+          font-size: 12px;
+          margin-left: 2px;
+        }
+      }
+    }
+
+    // 통보문
+    &.text {
+      & > div {
+        justify-content: flex-start;
+        line-height: 22px;
+        font-size: 13px;
+        letter-spacing: 1px;
+      }
+    }
+  }
+}
