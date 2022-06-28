@@ -8,6 +8,7 @@ const fs = require("fs-extra");
 const app = express();
 const upload = multer({dest: 'build/files/'});
 const { mw } = require('request-ip');
+const axios = require('axios');
 
 const port = new SerialPort(conf.serial, (err) => {
   err && console.log('Serial Port connection fail');
@@ -53,11 +54,17 @@ app.post('/api/upload/' + conf.id, upload.fields([{ name: 'ip' }, { name: 'files
   res.send({ ip: ip(req.ip), files: req.files});
 });
 // 리소스 폴더 main_dev 쪽 Root에 복사
-app.get('/api/build', (req, res) => {
-  fs.copy(__dirname + '/build', __dirname + '/../main_dev/resources', function (err) {
-    if (err) return res.send('Fail');
-    res.send('Success');
-  });
+app.get('/api/update', (req, res) => {
+  axios({ 
+    url: 'http://smartpole.enwiser.com/resource',
+    responseType: 'arraybuffer',
+  }).then(({ data }) => {
+    const toPath = __dirname + '/build/temp/';
+    !fs.existsSync(toPath) && fs.mkdirSync(toPath);
+    fs.writeFile(toPath + 'build.zip', data);
+    res.send('업데이트 완료');
+  })
+  
 });
 
 // serial
