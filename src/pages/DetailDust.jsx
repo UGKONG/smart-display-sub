@@ -46,8 +46,10 @@ const Img = Styled.div`
 `;
 const SubTitle = Styled.h2`
   width: 100%;
-  height: 30px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 16px;
+  letter-spacing: 2px;
 `

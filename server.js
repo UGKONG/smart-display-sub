@@ -4,6 +4,7 @@ const express = require('express');
 const { SerialPort } = require('serialport');
 const ipc = require('electron').ipcMain;
 const multer = require('multer');
+const fs = require("fs-extra");
 const app = express();
 const upload = multer({dest: 'build/files/'});
 const { mw } = require('request-ip');
@@ -50,6 +51,13 @@ app.post('/closeApp', () => ipc.emit('closeApp'));
 app.post('/reloadApp', () => ipc.emit('reloadApp'));
 app.post('/api/upload/' + conf.id, upload.fields([{ name: 'ip' }, { name: 'files' }]), (req, res) => {
   res.send({ ip: ip(req.ip), files: req.files});
+});
+// 리소스 폴더 main_dev 쪽 Root에 복사
+app.get('/api/build', (req, res) => {
+  fs.copy(__dirname + '/build', __dirname + '/../main_dev/resources', function (err) {
+    if (err) return res.send('Fail');
+    res.send('Success');
+  });
 });
 
 // serial

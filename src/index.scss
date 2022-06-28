@@ -31,8 +31,8 @@ html, body, #root {
   @include wrap();
   // background-color: rgb(43, 42, 42);
   background-color: #fff;
-  // color: #fff;
-  color: #333;
+  color: #fff;
+  // color: #333;
 }
 main {
   @include wrap();
@@ -46,26 +46,26 @@ main {
 
     & > h1 {
       @include flex(center, center);
-      @include font(24px, 700, null, 3px, center);
-      height: 70px;
+      @include font(24px, 700, #fff, 3px, center);
+      height: 60px;
     }
 
     & > h2 {
-      @include font(14px, 500, null, 1px, center);
+      @include font(14px, 500, #fff, 1px, center);
       height: 20px;
     }
 
     & > div {
       @include flex(space-around, center, column);
       width: 100%;
-      height: calc(100% - 90px);
-      padding: 10px 15px 15px;
+      height: calc(100% - 80px);
+      padding: 8px 15px 10px;
       overflow: hidden;
 
       & > p {
         @include flex(space-around, center);
         width: 100%;
-        font-size: 14px;
+        font-size: 16px;
         & > span {
           text-align: center;
         }
@@ -83,12 +83,12 @@ main {
     &.today, &.tomorrow {
       & p > span {
         &:first-of-type {
-          width: 40%;
+          width: 50%;
         }
         &:last-of-type {
-          @include flex(center, center);
-          width: 60%;
-          padding-left: 10px;
+          @include flex(space-around, center);
+          width: 50%;
+          // padding-left: 10px;
           & > span {
             width: 40%;
           }
@@ -99,7 +99,7 @@ main {
     // 중기날씨
     &.week {
       p > span {
-        font-size: 13px;
+        font-size: 16px;
 
         &:nth-of-type(1) {
           width: 30%;

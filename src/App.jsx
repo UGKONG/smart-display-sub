@@ -115,7 +115,7 @@ const App = () => {
   useEffect(startFn, []);
 
   return (
-    <Main style={{backgroundImage: `url(${afternoon})`}}>
+    <Main style={{backgroundImage: `url(${night})`}}>
       <Header />
       <Routes>
         {/* 스크린 1 */}
