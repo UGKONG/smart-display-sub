@@ -56,6 +56,10 @@ app.post('/reloadApp', () => ipc.emit('reloadApp'));
 app.post('/api/upload/' + conf.id, upload.fields([{ name: 'ip' }, { name: 'files' }]), (req, res) => {
   res.send({ ip: ip(req.ip), files: req.files});
 });
+
+// Start
+app.listen(80, () => console.log('No.' + conf.id +  'Hardware ON.'));
+
 // 중앙 서버의 리소스로 업데이트
 app.get('/api/update', (req, res) => {
   axios({ 
@@ -68,11 +72,11 @@ app.get('/api/update', (req, res) => {
     const targetPath = toPath + '../';
     !fs.existsSync(toPath) && fs.mkdirSync(toPath);
     fs.writeFile(toPath + 'build.zip', data, (err) => {
-      isSuccess = (err ? false : true);
+      if (err) isSuccess = false;
 
       const zip = new AdmZip(toPath + 'build.zip');
       zip.extractAllToAsync(targetPath, true, undefined, (err) => {
-        isSuccess = (err ? false : true)
+        if (err) isSuccess = false;
         res.send(isSuccess);
       });
     });
@@ -87,10 +91,17 @@ app.put('/serialPortOff', () => toggleSerialPort(false));
 
 app.get('*', (req, res) => res.send('페이지를 찾을 수 없습니다.'));
 
-// Start
-app.listen(80, () => {
-  console.log(`No.${conf.id} Hardware ON.`);
-});
+const update = () => {
+  request(conf.loadURL + '/api/update', (err, result) => {
+    if (err) {
+      console.log('업데이트 실패');
+      console.log(err);
+      return;
+    }
+
+    result?.body == 'true' && console.log('업데이트 성공');
+  });
+}
 
 const updateCheckFn = () => {
   request(`${conf.requestURL}/api/check`, (err, result) => {
@@ -99,15 +110,8 @@ const updateCheckFn = () => {
       let beforeSize = (err || !data) ? 0 : Number(Buffer.byteLength(data));
       let afterSize = Number(JSON.parse(result?.body)?.size);
       if (beforeSize === afterSize) return;
-
-      request(conf.loadURL + '/api/update', (err, result) => {
-        if (err) {
-          console.log('업데이트 실패');
-          console.log(err);
-        } else {
-          console.log('업데이트 성공');
-        }
-      });
+      
+      update();
     })
   })
 }

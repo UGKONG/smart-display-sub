@@ -8,7 +8,7 @@
     "server": "nodemon server.js",
     "start": "concurrently \"electron .\" \"webpack -w\" ",
     "build": "webpack && electron-packager . Display-Client --overwrite",
-    "build:web": "webpack --mode production"
+    "build:web": "webpack"
   },
   "keywords": [],
   "author": "",
