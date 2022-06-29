@@ -84,22 +84,22 @@ export default function ({ next, item }) {
           <span>
             {/* <span>{data?.tomorrow?.min?.SKY_TEXT ?? '-'}</span>
             <span>{data?.tomorrow?.max?.SKY_TEXT ?? '-'}</span> */}
-            <span><img src={SKY?.min} alt={data?.tomorrow?.min?.SKY_TEXT} /></span>
-            <span><img src={SKY?.max} alt={data?.tomorrow?.max?.SKY_TEXT} /></span>
+            <span>{SKY?.min ? <img src={SKY?.min} alt={data?.tomorrow?.min?.SKY_TEXT} /> : '-'}</span>
+            <span>{SKY?.max ? <img src={SKY?.max} alt={data?.tomorrow?.max?.SKY_TEXT} /> : '-'}</span>
           </span>
         </p>
         <p>
           <span>기온</span>
           <span>
-            <span>{data?.tomorrow?.min?.TMP ?? '-'}</span>
-            <span>{data?.tomorrow?.max?.TMP ?? '-'}</span>
+            <span>{data?.tomorrow?.min?.TMP_TEXT ?? '-'}</span>
+            <span>{data?.tomorrow?.max?.TMP_TEXT ?? '-'}</span>
           </span>
         </p>
         <p>
           <span>강수확률</span>
           <span>
-            <span>{data?.tomorrow?.min?.POP ?? '-'}</span>
-            <span>{data?.tomorrow?.max?.POP ?? '-'}</span>
+            <span>{data?.tomorrow?.min?.POP_TEXT ?? '-'}</span>
+            <span>{data?.tomorrow?.max?.POP_TEXT ?? '-'}</span>
           </span>
         </p>
         <p>
@@ -107,8 +107,8 @@ export default function ({ next, item }) {
           <span>
             {/* <span>{data?.tomorrow?.min?.PM10_TEXT ?? '-'}</span>
             <span>{data?.tomorrow?.max?.PM10_TEXT ?? '-'}</span> */}
-            <span><img src={PM10?.min} alt={data?.tomorrow?.min?.PM10_TEXT} /></span>
-            <span><img src={PM10?.max} alt={data?.tomorrow?.max?.PM10_TEXT} /></span>
+            <span>{PM10?.min ? <img src={PM10?.min} alt={data?.tomorrow?.min?.PM10_TEXT} /> : '-'}</span>
+            <span>{PM10?.max ? <img src={PM10?.max} alt={data?.tomorrow?.max?.PM10_TEXT} /> : '-'}</span>
           </span>
         </p>
         <p>
@@ -116,8 +116,8 @@ export default function ({ next, item }) {
           <span>
             {/* <span>{data?.tomorrow?.min?.PM25_TEXT ?? '-'}</span>
             <span>{data?.tomorrow?.max?.PM25_TEXT ?? '-'}</span> */}
-            <span><img src={PM25?.min} alt={data?.tomorrow?.min?.PM25_TEXT} /></span>
-            <span><img src={PM25?.max} alt={data?.tomorrow?.max?.PM25_TEXT} /></span>
+            <span>{PM25?.min ? <img src={PM25?.min} alt={data?.tomorrow?.min?.PM25_TEXT} /> : '-'}</span>
+            <span>{PM25?.max ? <img src={PM25?.max} alt={data?.tomorrow?.max?.PM25_TEXT} /> : '-'}</span>
           </span>
         </p>
       </div>

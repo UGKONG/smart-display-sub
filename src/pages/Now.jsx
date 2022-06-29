@@ -75,7 +75,7 @@ export default function ({ next, item }) {
         <p>
           <span>하늘</span>
           {/* <span>{data?.now?.SKY_TEXT ?? '-'}</span> */}
-          <span><img src={SKY} alt={data?.now?.SKY_TEXT} /></span>
+          <span>{SKY ? <img src={SKY} alt={data?.now?.SKY_TEXT} /> : '-'}</span>
         </p>
         <p>
           <span>기온</span>
@@ -88,12 +88,12 @@ export default function ({ next, item }) {
         <p>
           <span>미세먼지</span>
           {/* <span>{data?.now?.PM10_TEXT ?? '-'}</span> */}
-          <span><img src={PM10} alt={data?.now?.PM10_TEXT} /></span>
+          <span>{PM10 ? <img src={PM10} alt={data?.now?.PM10_TEXT} /> : '-'}</span>
         </p>
         <p>
           <span>초미세먼지</span>
           {/* <span>{data?.now?.PM25_TEXT ?? '-'}</span> */}
-          <span><img src={PM25} alt={data?.now?.PM25_TEXT} /></span>
+          <span>{PM25 ? <img src={PM25} alt={data?.now?.PM25_TEXT} /> : '-'}</span>
         </p>
       </div>
     </section>

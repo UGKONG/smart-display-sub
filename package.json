@@ -7,7 +7,8 @@
     "dev": "webpack-dev-server --mode development --port 3000 --hot --open",
     "server": "nodemon server.js",
     "start": "concurrently \"electron .\" \"webpack -w\" ",
-    "build": "webpack && electron-packager . Display-Client --overwrite"
+    "build": "webpack && electron-packager . Display-Client --overwrite",
+    "build:web": "webpack --mode production"
   },
   "keywords": [],
   "author": "",

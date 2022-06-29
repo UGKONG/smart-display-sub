@@ -57,7 +57,8 @@ main {
       @include flex(space-around, center, column);
       width: 100%;
       height: calc(100% - 80px);
-      padding: 8px 15px 10px;
+      // padding: 8px 15px 10px;
+      padding: 8px 12px 10px;
       overflow: hidden;
 
       & > p {
@@ -107,16 +108,16 @@ main {
         font-size: 16px;
 
         &:nth-of-type(1) {
-          width: 30%;
+          width: 18%;
         }
         &:nth-of-type(2) {
-          width: 25%;
+          width: 22%;
         }
         &:nth-of-type(3) {
-          width: 33%;
+          width: 40%;
         }
         &:nth-of-type(4) {
-          width: 27%;
+          width: 23%;
         }
         small {
           font-size: 12px;
