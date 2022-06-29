@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Styled from 'styled-components';
 import useStore from '%/useStore';
-import img1 from '../img/dustIcon/1.png';
-import img2 from '../img/dustIcon/2.png';
-import img3 from '../img/dustIcon/3.png';
-import img4 from '../img/dustIcon/4.png';
+import img1 from '../img/dustImg/1.png';
+import img2 from '../img/dustImg/2.png';
+import img3 from '../img/dustImg/3.png';
+import img4 from '../img/dustImg/4.png';
 
 export default function ({ next, item }) {
   const navigate = useNavigate();

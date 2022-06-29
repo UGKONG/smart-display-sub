@@ -13,13 +13,15 @@ export default function ({ next, item }) {
   useEffect(autoNextPage, []);
 
   return (
-    <section className='video'>
+    <section className='video' style={{ overflow: 'hidden' }}>
       <Video src={item?.mediaURL} loop muted autoPlay={true} />
     </section>
   )
 }
 
 const Video = Styled.video`
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
+  display: block;
+  margin: 0 auto;
 `;

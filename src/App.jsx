@@ -20,13 +20,14 @@ import Image from './pages/Image';
 import Video from './pages/Video';
 import Dev from "./pages/Dev";
 
-import morning from './img/sky/morning.jpg';
-import afternoon from './img/sky/afternoon.jpg';
-import evening from './img/sky/evening.jpg';
-import night from './img/sky/night.jpg';
+// import morning from './img/skyBg/morning.jpg';
+// import afternoon from './img/skyBg/afternoon.jpg';
+// import evening from './img/skyBg/evening.jpg';
+import night from './img/skyBg/night.jpg';
 
 const App = () => {
   const dispatch = useStore(x => x.setState);
+  const data = useStore(x => x?.data);
   const components = useRef([
     { id: 1, component: Now },
     { id: 2, component: Today },
@@ -113,6 +114,12 @@ const App = () => {
 
   // 함수 시작
   useEffect(startFn, []);
+
+  if (!data) return (
+    <Main style={{ backgroundImage: `url(${night})`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <span style={{ color: '#fff', fontSize: '10vw' }}>업데이트중..</span>
+    </Main>
+  );
 
   return (
     <Main style={{backgroundImage: `url(${night})`}}>

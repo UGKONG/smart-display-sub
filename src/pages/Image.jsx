@@ -23,7 +23,7 @@ export default function ({ next, item }) {
 const Section = Styled.section`
   background-color: transparent;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: auto 100%;
   background-position: center;
   background-image: url(${x => x.bg});
 `

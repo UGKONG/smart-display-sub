@@ -4,6 +4,7 @@ const { app, BrowserWindow, ipcMain, Menu, screen } = require('electron');
 const request = require('request');
 const reload = require('electron-reload');
 const conf = require('./config.json');
+const intervalTime = 5000;
 
 reload(__dirname);
 
@@ -18,7 +19,6 @@ const createWindow = () => {
     if (result?.body) result = JSON.parse(result?.body);  
 
     result?.forEach(item => {
-      console.log(item);
       let win = new BrowserWindow({
         x: left, y: 0, width: item?.WIDTH, height: item?.HEIGHT,
         alwaysOnTop: true, resizable: false, frame: false,
@@ -42,6 +42,8 @@ const intervalFn = () => {
     if (intervalValue === '' || intervalValue === data) return intervalValue = data;
 
     console.log('페이지 컨트롤 정보가 변경되어 재실행합니다.');
+    console.log('intervalValue: ', intervalValue);
+    console.log('data: ', data);
     // reload
     app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) });
     app.quit();
@@ -59,4 +61,4 @@ ipcMain.on('closeApp', () => {
   app.quit();
 });
 
-setInterval(() => intervalFn(), 5 * 1000);
+setInterval(() => intervalFn(), intervalTime);
