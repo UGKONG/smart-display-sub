@@ -20,9 +20,9 @@ import Image from './pages/Image';
 import Video from './pages/Video';
 import Dev from "./pages/Dev";
 
-// import morning from './img/skyBg/morning.jpg';
-// import afternoon from './img/skyBg/afternoon.jpg';
-// import evening from './img/skyBg/evening.jpg';
+import morning from './img/skyBg/morning.jpg';
+import afternoon from './img/skyBg/afternoon.jpg';
+import evening from './img/skyBg/evening.jpg';
 import night from './img/skyBg/night.jpg';
 
 const App = () => {
@@ -104,6 +104,10 @@ const App = () => {
     let result = (now < all.length - 1) ? now + 1 : 0;
     return all[result]?.path ?? '/now';
   };
+  // 자동 배경 변경 함수
+  const bgAutoFn = () => {
+
+  }
   // 시작 함수
   const startFn = () => {
     getDate();
@@ -114,15 +118,12 @@ const App = () => {
 
   // 함수 시작
   useEffect(startFn, []);
+  useEffect(bgAutoFn, [data?.info?.NOW]);
 
-  if (!data) return (
-    <Main style={{ backgroundImage: `url(${night})`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <span style={{ color: '#fff', fontSize: '10vw' }}>업데이트중..</span>
-    </Main>
-  );
+  if (!data) return <UpdateMain>업데이트중..</UpdateMain>;
 
   return (
-    <Main style={{backgroundImage: `url(${night})`}}>
+    <Main bg={afternoon}>
       <Header />
       <Routes>
         {/* 스크린 1 */}
@@ -170,4 +171,15 @@ const App = () => {
 
 export default App;
 
-const Main = Styled.main``;
+const Main = Styled.main`
+  background-image: url(${x => x?.bg});
+  background-color: #333;
+`;
+const UpdateMain = Styled.main`
+  display: flex;
+  align-items: center;
+  justifyContent: center;
+  background-color: #333;
+  color: #fff;
+  font-size: 10vw;
+`;

@@ -41,6 +41,8 @@ main {
   & > section {
     @include wrap();
     @include flex(flex-start, center, column);
+    position: relative;
+    z-index: 9;
 
     & > h1 {
       @include flex(center, center);
