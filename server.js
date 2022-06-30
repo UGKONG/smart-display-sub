@@ -99,7 +99,7 @@ const update = () => {
       return;
     }
 
-    result?.body == 'true' && console.log('업데이트 성공');
+    JSON?.parse(result?.body) && console.log('업데이트 성공');
   });
 }
 
@@ -108,6 +108,8 @@ const updateCheckFn = () => {
     if (err) return console.log(err);
     fs.readFile(__dirname + '/build/temp/build.zip', (err, data) => {
       let beforeSize = (err || !data) ? 0 : Number(Buffer.byteLength(data));
+      let body = result?.body;
+      if (body?.indexOf('<') > -1) return;
       let afterSize = Number(JSON.parse(result?.body)?.size);
       if (beforeSize === afterSize) return;
       
