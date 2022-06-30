@@ -40,6 +40,7 @@ const App = () => {
     { id: 9, component: Video },
   ]);
   const bgList = [ morning, afternoon, evening, night ];
+  const bdList = [ '#a0746b', '#016d94', '#ce9bac', '#16306d' ];
   const [activeBgIdx, setActiveBgIdx] = useState(0);
   // 양식 : { path: '/now', title: '현재상태', element: Now }
   const [scrPage, setScrPage] = useState([]);
@@ -57,6 +58,7 @@ const App = () => {
   const getData = useCallback(() => {
     useAxios.get('/getData?id=' + conf.id).then(({ data }) => {
       dispatch('data', data);
+
       let pageList = data?.info?.PAGE;
       let distinctScreen = [];
 
@@ -112,7 +114,6 @@ const App = () => {
     let result = 0;
 
     axios.get(conf.requestURL + '/api/getSetting/' + conf.id).then(({ data }) => {
-      console.log(data);
       let today = useDate(undefined, 'date');
       let time1 = new Date(`${today} ${data?.BG1_TIME}:00`)?.getTime();
       let time2 = new Date(`${today} ${data?.BG2_TIME}:00`)?.getTime();
@@ -130,6 +131,7 @@ const App = () => {
   const startFn = () => {
     getDate();
     getData();
+    autoBgFn();
     setInterval(getDate, 1000 * 60 * conf.timeSet.date);
     setInterval(getData, 1000 * 60 * conf.timeSet.data);
     setInterval(autoBgFn, 10000);
@@ -141,7 +143,7 @@ const App = () => {
   if (!data) return <UpdateMain>업데이트중..</UpdateMain>;
 
   return (
-    <Main bg={bgList[activeBgIdx]}>
+    <Main bg={bgList[activeBgIdx]} bd={bdList[activeBgIdx]}>
       <Header />
       <Routes>
         {/* 스크린 1 */}
@@ -191,12 +193,13 @@ export default App;
 
 const Main = Styled.main`
   background-image: url(${x => x?.bg});
+  border: 3px solid ${x => x?.bd};
   background-color: #333;
 `;
 const UpdateMain = Styled.main`
   display: flex;
   align-items: center;
-  justifyContent: center;
+  justify-content: center;
   background-color: #333;
   color: #fff;
   font-size: 10vw;

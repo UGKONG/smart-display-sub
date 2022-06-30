@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Styled from 'styled-components';
 import useStore from '%/useStore';
@@ -8,10 +8,8 @@ import img3 from '../img/dustImg/3.png';
 import img4 from '../img/dustImg/4.png';
 
 export default function ({ next, item }) {
-  console.log(item);
   const navigate = useNavigate();
   const data = useStore(x => x.data);
-  console.log(data);
 
   let pm = data?.now?.PM10_TEXT;
   let img = pm === '좋음' ? img1 : pm === '보통' ? img2 : pm === '나쁨' ? img3 : pm === '매우나쁨' ? img4 : null;
@@ -24,11 +22,21 @@ export default function ({ next, item }) {
   }
   useEffect(autoNextPage, []);
 
+  const color = useMemo(() => {
+    let val = data?.now?.PM10_TEXT;
+    let result = '#fff';
+    if (val === '좋음') result = '#2359c4';
+    if (val === '보통') result = '#00b16b';
+    if (val === '나쁨') result = '#ffd543';
+    if (val === '매우나쁨') result = '#da3539';
+    return result;
+  }, [data?.now?.PM10_TEXT]);
+
   return (
     <section className='now'>
       <Title>{item?.title ?? '-'}</Title>
       <Img bg={img} />
-      <SubTitle>{data?.now?.PM10_TEXT ?? '-'}</SubTitle>
+      <SubTitle style={{ color, fontWeight: 700 }}>{data?.now?.PM10_TEXT ?? '-'}</SubTitle>
     </section>
   )
 }

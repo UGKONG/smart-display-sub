@@ -24,6 +24,30 @@ export default function ({ next, item }) {
     console.log('현재: ' + item?.path + ', 다음: ' + next + ' (' + timer + '초 후 자동이동)');
   }
   
+  const PM10_COLOR = useMemo(() => {
+    let now = data?.info?.NOW?.split(' ')[1]?.split(':')[0];
+    if (now) now = Number(now);
+    let val = (now < 12) ? data?.today?.min?.PM10_TEXT : data?.today?.max?.PM10_TEXT;
+    let result = '#fff'; 
+    if (val === '좋음') result = '#2359c4';
+    if (val === '보통') result = '#00b16b';
+    if (val === '나쁨') result = '#ffd543';
+    if (val === '매우나쁨') result = '#da3539';
+    return result;
+  }, [data?.today]);
+
+  const PM25_COLOR = useMemo(() => {
+    let now = data?.info?.NOW?.split(' ')[1]?.split(':')[0];
+    if (now) now = Number(now);
+    let val = (now < 12) ? data?.today?.min?.PM25_TEXT : data?.today?.max?.PM25_TEXT;
+    let result = '#fff'; 
+    if (val === '좋음') result = '#2359c4';
+    if (val === '보통') result = '#00b16b';
+    if (val === '나쁨') result = '#ffd543';
+    if (val === '매우나쁨') result = '#da3539';
+    return result;
+  }, [data?.today]);
+
   const SKY = useMemo(() => {
     let { min, max } = data?.today;
     let minResult = null;
@@ -82,8 +106,6 @@ export default function ({ next, item }) {
         <p>
           <span>하늘상태</span>
           <span>
-            {/* <span>{data?.today?.min?.SKY_TEXT ?? '-'}</span>
-            <span>{data?.today?.max?.SKY_TEXT ?? '-'}</span> */}
             <span>{SKY?.min ? <img src={SKY?.min} alt={data?.today?.min?.SKY_TEXT} /> : '-'}</span>
             <span>{SKY?.max ? <img src={SKY?.max} alt={data?.today?.max?.SKY_TEXT} /> : '-'}</span>
           </span>
@@ -103,19 +125,15 @@ export default function ({ next, item }) {
           </span>
         </p>
         <p>
-          <span>미세먼지</span>
+          <span style={{ color: PM10_COLOR }}>미세먼지</span>
           <span>
-            {/* <span>{data?.today?.min?.PM10_TEXT ?? '-'}</span>
-            <span>{data?.today?.max?.PM10_TEXT ?? '-'}</span> */}
             <span>{PM10?.min ? <img src={PM10?.min} alt={data?.today?.min?.PM10_TEXT} /> : '-'}</span>
             <span>{PM10?.max ? <img src={PM10?.max} alt={data?.today?.max?.PM10_TEXT} /> : '-'}</span>
           </span>
         </p>
         <p>
-          <span>초미세먼지</span>
+          <span style={{ color: PM25_COLOR }}>초미세먼지</span>
           <span>
-            {/* <span>{data?.today?.min?.PM25_TEXT ?? '-'}</span>
-            <span>{data?.today?.max?.PM25_TEXT ?? '-'}</span> */}
             <span>{PM25?.min ? <img src={PM25?.min} alt={data?.today?.min?.PM25_TEXT} /> : '-'}</span>
             <span>{PM25?.max ? <img src={PM25?.max} alt={data?.today?.max?.PM25_TEXT} /> : '-'}</span>
           </span>

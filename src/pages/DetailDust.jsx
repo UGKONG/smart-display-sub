@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Styled from 'styled-components';
 import useStore from '%/useStore';
@@ -21,11 +21,21 @@ export default function ({ next, item }) {
   }
   useEffect(autoNextPage, []);
 
+  const color = useMemo(() => {
+    let val = data?.now?.PM25_TEXT;
+    let result = '#fff';
+    if (val === '좋음') result = '#2359c4';
+    if (val === '보통') result = '#00b16b';
+    if (val === '나쁨') result = '#ffd543';
+    if (val === '매우나쁨') result = '#da3539';
+    return result;
+  }, [data?.now?.PM25_TEXT]);
+
   return (
     <section className='now'>
       <Title>{item?.title ?? '-'}</Title>
       <Img bg={img} />
-      <SubTitle>{data?.now?.PM25_TEXT ?? '-'}</SubTitle>
+      <SubTitle style={{ color, fontWeight: 700 }}>{data?.now?.PM25_TEXT ?? '-'}</SubTitle>
     </section>
   )
 }
