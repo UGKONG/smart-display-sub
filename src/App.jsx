@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Routes, Route } from 'react-router-dom';
 import Styled from 'styled-components';
 import axios from "axios";
@@ -39,6 +39,8 @@ const App = () => {
     { id: 8, component: Image },
     { id: 9, component: Video },
   ]);
+  const bgList = useRef([ morning, afternoon, evening, night ]);
+  const [activeBgIdx, setActiveBgIdx] = useState(0);
   // 양식 : { path: '/now', title: '현재상태', element: Now }
   const [scrPage, setScrPage] = useState([]);
 
@@ -105,25 +107,34 @@ const App = () => {
     return all[result]?.path ?? '/now';
   };
   // 자동 배경 변경 함수
-  const bgAutoFn = () => {
-
+  const autoBgFn = () => {
+    let maxLength = bgList?.current?.length; // 4
+    let isTrue = activeBgIdx < maxLength - 1;
+    console.log(isTrue);
+    if (isTrue) {
+      setActiveBgIdx(prev => prev + 1);
+    } else {
+      setActiveBgIdx(0);
+    }
+    console.log(activeBgIdx);
   }
+  const autoBg = useMemo(() => bgList?.current[activeBgIdx], [bgList, activeBgIdx]);
   // 시작 함수
   const startFn = () => {
     getDate();
     getData();
     setInterval(getDate, 1000 * 60 * conf.timeSet.date);
     setInterval(getData, 1000 * 60 * conf.timeSet.data);
+    setInterval(autoBgFn, 10000);  // 시연용 10초
   }
 
   // 함수 시작
   useEffect(startFn, []);
-  useEffect(bgAutoFn, [data?.info?.NOW]);
 
   if (!data) return <UpdateMain>업데이트중..</UpdateMain>;
 
   return (
-    <Main bg={afternoon}>
+    <Main bg={autoBg}>
       <Header />
       <Routes>
         {/* 스크린 1 */}
