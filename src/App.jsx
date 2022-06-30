@@ -108,8 +108,23 @@ const App = () => {
   };
   // 자동 배경 변경 함수
   const autoBgFn = () => {
-    let maxLength = bgList?.length; // 4개
-    setActiveBgIdx(prev => prev < maxLength - 1 ? prev + 1 : 0);
+    let now = (new Date()).getTime();
+    let result = 0;
+
+    axios.get(conf.requestURL + '/api/getSetting/' + conf.id).then(({ data }) => {
+      console.log(data);
+      let today = useDate(undefined, 'date');
+      let time1 = new Date(`${today} ${data?.BG1_TIME}:00`)?.getTime();
+      let time2 = new Date(`${today} ${data?.BG2_TIME}:00`)?.getTime();
+      let time3 = new Date(`${today} ${data?.BG3_TIME}:00`)?.getTime();
+      let time4 = new Date(`${today} ${data?.BG4_TIME}:00`)?.getTime();
+      
+      if (now >= time1) result = 0;
+      if (now >= time2) result = 1;
+      if (now >= time3) result = 2;
+      if (now >= time4) result = 3;
+      setActiveBgIdx(result);
+    });
   }
   // 시작 함수
   const startFn = () => {
@@ -117,7 +132,7 @@ const App = () => {
     getData();
     setInterval(getDate, 1000 * 60 * conf.timeSet.date);
     setInterval(getData, 1000 * 60 * conf.timeSet.data);
-    setInterval(autoBgFn, 10000);  // 시연용 10초
+    setInterval(autoBgFn, 10000);
   }
 
   // 함수 시작
