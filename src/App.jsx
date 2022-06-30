@@ -39,7 +39,7 @@ const App = () => {
     { id: 8, component: Image },
     { id: 9, component: Video },
   ]);
-  const bgList = useRef([ morning, afternoon, evening, night ]);
+  const bgList = [ morning, afternoon, evening, night ];
   const [activeBgIdx, setActiveBgIdx] = useState(0);
   // 양식 : { path: '/now', title: '현재상태', element: Now }
   const [scrPage, setScrPage] = useState([]);
@@ -108,17 +108,9 @@ const App = () => {
   };
   // 자동 배경 변경 함수
   const autoBgFn = () => {
-    let maxLength = bgList?.current?.length; // 4
-    let isTrue = activeBgIdx < maxLength - 1;
-    console.log(isTrue);
-    if (isTrue) {
-      setActiveBgIdx(prev => prev + 1);
-    } else {
-      setActiveBgIdx(0);
-    }
-    console.log(activeBgIdx);
+    let maxLength = bgList?.length; // 4개
+    setActiveBgIdx(prev => prev < maxLength - 1 ? prev + 1 : 0);
   }
-  const autoBg = useMemo(() => bgList?.current[activeBgIdx], [bgList, activeBgIdx]);
   // 시작 함수
   const startFn = () => {
     getDate();
@@ -129,12 +121,12 @@ const App = () => {
   }
 
   // 함수 시작
-  useEffect(startFn, []);
+  useEffect(() => startFn(), []);
 
   if (!data) return <UpdateMain>업데이트중..</UpdateMain>;
 
   return (
-    <Main bg={autoBg}>
+    <Main bg={bgList[activeBgIdx]}>
       <Header />
       <Routes>
         {/* 스크린 1 */}

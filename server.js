@@ -6,12 +6,12 @@ const ipc = require('electron').ipcMain;
 const multer = require('multer');
 const fs = require('fs');
 const app = express();
-const upload = multer({dest: 'build/files/'});
+const upload = multer({dest: __dirname + '/build/files/'});
 const { mw } = require('request-ip');
 const axios = require('axios');
 const AdmZip = require('adm-zip');
 const request = require('request');
-const intervalTime = 5000;
+const intervalTime = 10000;
 
 const port = new SerialPort(conf.serial, (err) => {
   err && console.log('Serial Port connection fail');
@@ -77,7 +77,14 @@ app.get('/api/update', (req, res) => {
       const zip = new AdmZip(toPath + 'build.zip');
       zip.extractAllToAsync(targetPath, true, undefined, (err) => {
         if (err) isSuccess = false;
-        res.send(isSuccess);
+        fs.unlink(toPath + 'build.zip', (err) => {
+          if (err) isSuccess = false;
+          fs.rmdir(targetPath + 'temp', (err) => {
+            if (err) isSuccess = false;
+            console.log(isSuccess);
+            res.send(isSuccess);
+          });
+        });
       });
     });
   });
@@ -91,31 +98,33 @@ app.put('/serialPortOff', () => toggleSerialPort(false));
 
 app.get('*', (req, res) => res.send('페이지를 찾을 수 없습니다.'));
 
-const update = () => {
+const update = adminVersion => {
+  console.log('업데이트를 진행합니다.');
   request(conf.loadURL + '/api/update', (err, result) => {
-    if (err) {
-      console.log('업데이트 실패');
-      console.log(err);
-      return;
-    }
-
-    JSON?.parse(result?.body) && console.log('업데이트 성공');
+    err && console.log('error', err);
+    let isSuccess = JSON.parse(result?.body) ? 1 : 0;
+    console.log('업데이트 ' + (isSuccess ? '성공' : '실패') + '하였습니다.');
+    if (isSuccess === 0) return;
+    axios.put(`
+      ${conf.requestURL}/api/hardwareUpdate/
+      ${conf.id}/${adminVersion}/${isSuccess}
+    `);
   });
 }
 
 const updateCheckFn = () => {
-  request(`${conf.requestURL}/api/check`, (err, result) => {
+  request(`${conf.requestURL}/api/updateInfo/${conf.id}`, (err, result) => {
     if (err) return console.log(err);
-    fs.readFile(__dirname + '/build/temp/build.zip', (err, data) => {
-      let beforeSize = (err || !data) ? 0 : Number(Buffer.byteLength(data));
-      let body = result?.body;
-      if (body?.indexOf('<') > -1) return;
-      let afterSize = Number(JSON.parse(result?.body)?.size);
-      if (beforeSize === afterSize) return;
-      
-      update();
-    })
+    let body = result?.body;
+    if (body?.indexOf('<') > -1) return;
+    let data = JSON.parse(body);
+    let { admin, hardware } = data;
+    admin = admin?.VERSION;
+    hardware = hardware?.VERSION;
+    if (!admin) return;
+    admin > hardware && update(admin);
   })
 }
 
+updateCheckFn();
 setInterval(() => updateCheckFn(), intervalTime);
