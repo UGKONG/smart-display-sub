@@ -26,6 +26,7 @@
   list-style: none;
   user-select: none;
   font-family: 'Noto Sans KR', sans-serif;
+  cursor: none;
 }
 html, body, #root {
   @include wrap();
@@ -119,7 +120,7 @@ main {
           width: 40%;
         }
         &:nth-of-type(4) {
-          width: 23%;
+          width: 24%;
         }
         small {
           font-size: 12px;

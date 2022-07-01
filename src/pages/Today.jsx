@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '%/useStore';
 import sunIcon from '@/img/skyIcon/sun.png';
@@ -17,6 +17,8 @@ export default function ({ next, item }) {
   const navigate = useNavigate();
   const date = useStore(x => x.date);
   const data = useStore(x => x.data);
+  const [nowTime, setNowTime] = useState({ day: null });
+  const dayList = useRef(['일','월','화','수','목','금','토']);
   
   const autoNextPage = () => {
     let timer = item?.timer ?? item?.defaultTimer ?? 5;
@@ -24,29 +26,11 @@ export default function ({ next, item }) {
     console.log('현재: ' + item?.path + ', 다음: ' + next + ' (' + timer + '초 후 자동이동)');
   }
   
-  const PM10_COLOR = useMemo(() => {
-    let now = data?.info?.NOW?.split(' ')[1]?.split(':')[0];
-    if (now) now = Number(now);
-    let val = (now < 12) ? data?.today?.min?.PM10_TEXT : data?.today?.max?.PM10_TEXT;
-    let result = '#fff'; 
-    if (val === '좋음') result = '#2359c4';
-    if (val === '보통') result = '#00b16b';
-    if (val === '나쁨') result = '#ffd543';
-    if (val === '매우나쁨') result = '#da3539';
-    return result;
-  }, [data?.today]);
-
-  const PM25_COLOR = useMemo(() => {
-    let now = data?.info?.NOW?.split(' ')[1]?.split(':')[0];
-    if (now) now = Number(now);
-    let val = (now < 12) ? data?.today?.min?.PM25_TEXT : data?.today?.max?.PM25_TEXT;
-    let result = '#fff'; 
-    if (val === '좋음') result = '#2359c4';
-    if (val === '보통') result = '#00b16b';
-    if (val === '나쁨') result = '#ffd543';
-    if (val === '매우나쁨') result = '#da3539';
-    return result;
-  }, [data?.today]);
+  const nowTimeFn = () => {
+    let currentDate = new Date();
+    let day = dayList?.current[currentDate?.getDay()] ?? '-';
+    setNowTime({ day });
+  };
 
   const SKY = useMemo(() => {
     let { min, max } = data?.today;
@@ -90,11 +74,16 @@ export default function ({ next, item }) {
   }, [data?.today]);
 
   useEffect(autoNextPage, []);
+  useEffect(() => {
+    nowTimeFn();
+    let interval = setInterval(nowTimeFn, 500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className='today'>
       <h1>{item?.title ?? '-'}</h1>
-      <h2>{data?.info?.LOCATION?.PATH3 ?? '-'} {date?.today}</h2>
+      <h2>{data?.info?.LOCATION?.PATH3 ?? '-'} {date?.today} ({nowTime?.day})</h2>
       <div>
         <p>
           <span />
@@ -104,7 +93,7 @@ export default function ({ next, item }) {
           </span>
         </p>
         <p>
-          <span>하늘상태</span>
+          <span>하늘</span>
           <span>
             <span>{SKY?.min ? <img src={SKY?.min} alt={data?.today?.min?.SKY_TEXT} /> : '-'}</span>
             <span>{SKY?.max ? <img src={SKY?.max} alt={data?.today?.max?.SKY_TEXT} /> : '-'}</span>
@@ -118,21 +107,21 @@ export default function ({ next, item }) {
           </span>
         </p>
         <p>
-          <span>강수확률</span>
+          <span>강수</span>
           <span>
             <span>{data?.today?.min?.POP_TEXT ?? '-'}</span>
             <span>{data?.today?.max?.POP_TEXT ?? '-'}</span>
           </span>
         </p>
         <p>
-          <span style={{ color: PM10_COLOR }}>미세먼지</span>
+          <span style={{ color: '#ffd543' }}>미세먼지</span>
           <span>
             <span>{PM10?.min ? <img src={PM10?.min} alt={data?.today?.min?.PM10_TEXT} /> : '-'}</span>
             <span>{PM10?.max ? <img src={PM10?.max} alt={data?.today?.max?.PM10_TEXT} /> : '-'}</span>
           </span>
         </p>
         <p>
-          <span style={{ color: PM25_COLOR }}>초미세먼지</span>
+          <span style={{ color: '#ffd543' }}>초미세먼지</span>
           <span>
             <span>{PM25?.min ? <img src={PM25?.min} alt={data?.today?.min?.PM25_TEXT} /> : '-'}</span>
             <span>{PM25?.max ? <img src={PM25?.max} alt={data?.today?.max?.PM25_TEXT} /> : '-'}</span>

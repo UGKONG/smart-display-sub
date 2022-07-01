@@ -6,7 +6,7 @@
   "pageTime": 5,
   "timeSet": {
     "date": 5,
-    "data": 60
+    "data": 10
   },
   "serial": {
     "path": "COM3",

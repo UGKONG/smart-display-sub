@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '%/useStore';
+import useDate from '%/useDate';
 import sunIcon from '@/img/skyIcon/sun.png';
 import manyCloudIcon from '@/img/skyIcon/manyCloud.png';
 import cloudIcon from '@/img/skyIcon/cloud.png';
@@ -12,13 +13,13 @@ import dustIcon1 from '@/img/dustIcon/1.png';
 import dustIcon2 from '@/img/dustIcon/2.png';
 import dustIcon3 from '@/img/dustIcon/3.png';
 import dustIcon4 from '@/img/dustIcon/4.png';
-import useDate from '%/useDate';
 
 export default function ({ next, item }) {
   const navigate = useNavigate();
   const date = useStore(x => x.date);
   const data = useStore(x => x.data);
-  const [nowTime, setNowTime] = useState({ type: null, time: null });
+  const [nowTime, setNowTime] = useState({ type: null, time: null, day: null });
+  const dayList = useRef(['일','월','화','수','목','금','토']);
   
   const autoNextPage = () => {
     let timer = item?.timer ?? item?.defaultTimer ?? 5;
@@ -27,14 +28,16 @@ export default function ({ next, item }) {
   }
 
   const nowTimeFn = () => {
+    let currentDate = new Date();
     let currentTime = useDate(undefined, 'time');
+    let day = dayList?.current[currentDate?.getDay()] ?? '-';
     let [h, m, s] = currentTime?.split(':');
     h = Number(h);
     let type = h >= 12 ? '오후' : '오전';
     h -= h > 12 ? 12 : 0;
     h = String(h < 10 ? '0' + h : h);
     let time = h + ':' + m + ':' + s;
-    setNowTime({ type, time });
+    setNowTime({ type, time, day });
   };
 
   const SKY = useMemo(() => {
@@ -45,6 +48,7 @@ export default function ({ next, item }) {
     if (val === 4) result = cloudIcon;
     return result;
   }, [data?.now?.SKY]);
+
   const PM10 = useMemo(() => {
     let val = data?.now?.PM10_TEXT;
     let img = null;
@@ -71,12 +75,12 @@ export default function ({ next, item }) {
     nowTimeFn();
     let interval = setInterval(nowTimeFn, 500);
     return () => clearInterval(interval);
-  })
+  }, []);
 
   return (
     <section className='now'>
       <h1>{item?.title ?? '-'}</h1>
-      <h2>{data?.info?.LOCATION?.PATH3 ?? '-'} {date?.today}</h2>
+      <h2>{data?.info?.LOCATION?.PATH3 ?? '-'} {date?.today} ({nowTime?.day})</h2>
       <div>
         <p style={{ letterSpacing: 2, fontSize: 14, color: '#b0db26' }}>
           {nowTime?.type ?? ' '} {nowTime?.time ?? ' '}
@@ -94,11 +98,11 @@ export default function ({ next, item }) {
           <span>{data?.now?.O3_TEXT ?? '-'}</span>
         </p>
         <p>
-          <span style={{ color: PM10?.color }}>미세먼지</span>
+          <span style={{ color: '#ffd543' }}>미세먼지</span>
           <span>{PM10?.img ? <img src={PM10?.img} alt={data?.now?.PM10_TEXT} /> : '-'}</span>
         </p>
         <p>
-          <span style={{ color: PM25?.color }}>초미세먼지</span>
+          <span style={{ color: '#ffd543' }}>초미세먼지</span>
           <span>{PM25?.img ? <img src={PM25?.img} alt={data?.now?.PM25_TEXT} /> : '-'}</span>
         </p>
       </div>

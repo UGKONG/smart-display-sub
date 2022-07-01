@@ -32,7 +32,7 @@ export default function ({ next, item }) {
   }, [data?.now?.PM25_TEXT]);
 
   return (
-    <section className='now'>
+    <section className='now' style={{ backgroundColor: '#000' }}>
       <Title>{item?.title ?? '-'}</Title>
       <Img bg={img} />
       <SubTitle style={{ color, fontWeight: 700 }}>{data?.now?.PM25_TEXT ?? '-'}</SubTitle>

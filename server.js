@@ -36,20 +36,7 @@ app.use('/api/getIp', (req, res) => {
   if (ip.indexOf('::') > -1) return res.send(ip?.split('::')[1]);
   res.end(ip);
 });
-app.use('/now', express.static(__dirname + '/build'));
-app.use('/today', express.static(__dirname + '/build'));
-app.use('/tomorrow', express.static(__dirname + '/build'));
-app.use('/week', express.static(__dirname + '/build'));
-app.use('/text', express.static(__dirname + '/build'));
-app.use('/dust', express.static(__dirname + '/build'));
-app.use('/detailDust', express.static(__dirname + '/build'));
-app.use('/image', express.static(__dirname + '/build'));
-app.use('/video', express.static(__dirname + '/build'));
-app.use('/logo', express.static(__dirname + '/build'));
-app.use('/dev', express.static(__dirname + '/build'));
-
-// Routes
-app.get('/', (req, res) => res.redirect('/now'));
+app.use('/:id', express.static(__dirname + '/build'));
 app.get('/api/getIp', (req, res) => res.send(getClientIp(req)));
 app.post('/closeApp', () => ipc.emit('closeApp'));
 app.post('/reloadApp', () => ipc.emit('reloadApp'));
@@ -81,7 +68,6 @@ app.get('/api/update', (req, res) => {
           if (err) isSuccess = false;
           fs.rmdir(targetPath + 'temp', (err) => {
             if (err) isSuccess = false;
-            console.log(isSuccess);
             res.send(isSuccess);
           });
         });

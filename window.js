@@ -42,8 +42,6 @@ const intervalFn = () => {
     if (intervalValue === '' || intervalValue === data) return intervalValue = data;
 
     console.log('페이지 컨트롤 정보가 변경되어 재실행합니다.');
-    console.log('intervalValue: ', intervalValue);
-    console.log('data: ', data);
     // reload
     app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) });
     app.quit();

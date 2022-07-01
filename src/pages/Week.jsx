@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '%/useStore';
 import useDate from '%/useDate';
@@ -21,6 +21,15 @@ export default function ({ next, item }) {
     console.log('현재: ' + item?.path + ', 다음: ' + next + ' (' + timer + '초 후 자동이동)');
   }
 
+  const dateRange = useMemo(() => {
+    let week = data?.week ?? [];
+    if (week?.length === 0) return '';
+    let start = week[0]?.DATE?.slice(5)?.replaceAll('-', '/');
+    let end = week[week?.length - 1]?.DATE?.slice(5)?.replaceAll('-', '/');
+    let result = '(' + start + '~' + end + ')';
+    return result;
+  }, [data?.week]);
+
   const dateToDay = useCallback(dt => {
     if (!dt) return '-';
     let date = new Date(dt);
@@ -41,7 +50,7 @@ export default function ({ next, item }) {
   return (
     <section className='week'>
       <h1>{item?.title ?? '-'}</h1>
-      <h2>{data?.info?.LOCATION?.PATH3 ?? '-'}</h2>
+      <h2>{data?.info?.LOCATION?.PATH3 ?? '-'} {dateRange}</h2>
       <div>
         <p>
           <span></span>
