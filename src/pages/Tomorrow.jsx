@@ -38,11 +38,11 @@ export default function ({ next, item }) {
     let minResult = null;
     let maxResult = null;
     if (min?.SKY === 1) minResult = sunIcon;
-    if (min?.SKY === 3) minResult = manyCloudIcon;
-    if (min?.SKY === 4) minResult = cloudIcon;
+    if (min?.SKY === 3) minResult = cloudSunIcon;
+    if (min?.SKY === 4) minResult = manyCloudIcon;
     if (max?.SKY === 1) maxResult = sunIcon;
-    if (max?.SKY === 3) maxResult = manyCloudIcon;
-    if (max?.SKY === 4) maxResult = cloudIcon;
+    if (max?.SKY === 3) maxResult = cloudSunIcon;
+    if (max?.SKY === 4) maxResult = manyCloudIcon;
     return { min: minResult, max: maxResult };
   }, [data?.tomorrow]);
   const PM10 = useMemo(() => {

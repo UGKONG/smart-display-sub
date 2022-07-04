@@ -40,8 +40,8 @@ export default function ({ next, item }) {
   const SKY = useCallback(val => {
     let result = null;
     if (val === 1) result = sunIcon;
-    if (val === 3) result = manyCloudIcon;
-    if (val === 4) result = cloudIcon;
+    if (val === 3) result = cloudSunIcon;
+    if (val === 4) result = manyCloudIcon;
     return result;
   }, [data?.week]);
 
