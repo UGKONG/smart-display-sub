@@ -20,7 +20,7 @@ export default function ({ next, item }) {
     console.log('현재: ' + item?.path + ', 다음: ' + next + ' (' + timer + '초 후 자동이동)');
     return () => clearTimeout(t);
   }
-  useEffect(autoNextPage, []);
+  useEffect(autoNextPage, [next, item]);
 
   const color = useMemo(() => {
     let val = data?.now?.PM10_TEXT;

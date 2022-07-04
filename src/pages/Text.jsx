@@ -21,7 +21,7 @@ export default function ({ next, item }) {
     setNowTime({ day });
   };
 
-  useEffect(autoNextPage, []);
+  useEffect(autoNextPage, [next, item]);
   useEffect(() => {
     nowTimeFn();
     let interval = setInterval(nowTimeFn, 500);

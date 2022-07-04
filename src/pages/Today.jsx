@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '%/useStore';
-import sunIcon from '@/img/skyIcon/sun.png';
-import manyCloudIcon from '@/img/skyIcon/manyCloud.png';
-import cloudIcon from '@/img/skyIcon/cloud.png';
-import cloudSunIcon from '@/img/skyIcon/cloudSun.png';
-import rainIcon from '@/img/skyIcon/rain.png';
-import snowIcon from '@/img/skyIcon/snow.png';
-import windIcon from '@/img/skyIcon/wind.png';
 import dustIcon1 from '@/img/dustIcon/1.png';
 import dustIcon2 from '@/img/dustIcon/2.png';
 import dustIcon3 from '@/img/dustIcon/3.png';
 import dustIcon4 from '@/img/dustIcon/4.png';
+import sky_1_icon from '@/img/skyIcon/1.png';
+import sky_3_icon from '@/img/skyIcon/3.png';
+import sky_3_1_icon from '@/img/skyIcon/3-1.png';
+import sky_3_2_icon from '@/img/skyIcon/3-2.png';
+import sky_4_icon from '@/img/skyIcon/4.png';
+import sky_4_1_icon from '@/img/skyIcon/4-1.png';
+import sky_4_2_icon from '@/img/skyIcon/4-2.png';
 
 export default function ({ next, item }) {
   const navigate = useNavigate();
@@ -36,12 +36,21 @@ export default function ({ next, item }) {
     let { min, max } = data?.today;
     let minResult = null;
     let maxResult = null;
-    if (min?.SKY === 1) minResult = sunIcon;
-    if (min?.SKY === 3) minResult = cloudSunIcon;
-    if (min?.SKY === 4) minResult = manyCloudIcon;
-    if (max?.SKY === 1) maxResult = sunIcon;
-    if (max?.SKY === 3) maxResult = cloudSunIcon;
-    if (max?.SKY === 4) maxResult = manyCloudIcon;
+    if (min?.SKY === 1) minResult = sky_1_icon;
+    if (min?.SKY === 3) minResult = sky_3_icon;
+    if (min?.SKY === 3 && (val?.PTY === 1 || val?.PTY === 2 || val?.PTY === 4 || val?.PTY === 5 || val?.PTY === 6) && min?.POP >= 50) minResult = sky_3_1_icon;
+    if (min?.SKY === 3 && (val?.PTY === 3 || val?.PTY === 7) && min?.POP >= 50) minResult = sky_3_2_icon;
+    if (min?.SKY === 4) minResult = sky_4_icon;
+    if (min?.SKY === 4 && (val?.PTY === 1 || val?.PTY === 2 || val?.PTY === 4 || val?.PTY === 5 || val?.PTY === 6) && min?.POP >= 50) minResult = sky_4_1_icon;
+    if (min?.SKY === 4 && (val?.PTY === 3 || val?.PTY === 7) && min?.POP >= 50) minResult = sky_4_2_icon;
+
+    if (max?.SKY === 1) maxResult = sky_1_icon;
+    if (max?.SKY === 3) maxResult = sky_3_icon;
+    if (max?.SKY === 3 && (val?.PTY === 1 || val?.PTY === 2 || val?.PTY === 4 || val?.PTY === 5 || val?.PTY === 6) && max?.POP >= 50) maxResult = sky_3_1_icon;
+    if (max?.SKY === 3 && (val?.PTY === 3 || val?.PTY === 7) && max?.POP >= 50) maxResult = sky_3_1_icon;
+    if (max?.SKY === 4) maxResult = sky_4_icon;
+    if (max?.SKY === 4 && (val?.PTY === 1 || val?.PTY === 2 || val?.PTY === 4 || val?.PTY === 5 || val?.PTY === 6) && max?.POP >= 50) maxResult = sky_4_1_icon;
+    if (max?.SKY === 4 && (val?.PTY === 3 || val?.PTY === 7) && max?.POP >= 50) maxResult = sky_4_1_icon;
     return { min: minResult, max: maxResult };
   }, [data?.today]);
   const PM10 = useMemo(() => {
@@ -73,7 +82,7 @@ export default function ({ next, item }) {
     return { min: minResult, max: maxResult };
   }, [data?.today]);
 
-  useEffect(autoNextPage, []);
+  useEffect(autoNextPage, [next, item]);
   useEffect(() => {
     nowTimeFn();
     let interval = setInterval(nowTimeFn, 500);

@@ -12,7 +12,8 @@ export default function ({ next, item }) {
     setTimeout(() => navigate(next), timer * 1000);
     console.log('현재: ' + item?.path + ', 다음: ' + next + ' (' + timer + '초 후 자동이동)');
   }
-  useEffect(autoNextPage, []);
+  
+  useEffect(autoNextPage, [next, item]);
   
 
   return (
@@ -25,5 +26,5 @@ const Section = Styled.section`
   background-repeat: no-repeat;
   background-size: auto 100%;
   background-position: center;
-  background-image: url(${x => x.bg});
+  background-image: url(/public/files/${x => x.bg});
 `

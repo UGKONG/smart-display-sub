@@ -10,7 +10,7 @@ export default function ({ next, item }) {
     setTimeout(() => navigate(next), timer * 1000);
     console.log('현재: ' + item?.path + ', 다음: ' + next + ' (' + timer + '초 후 자동이동)');
   }
-  useEffect(autoNextPage, []);
+  useEffect(autoNextPage, [next, item]);
 
   return (
     <section className='video' style={{ overflow: 'hidden' }}>

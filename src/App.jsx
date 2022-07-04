@@ -7,7 +7,6 @@ import useDate from '%/useDate';
 import useStore from '%/useStore';
 import conf from '../config.json';
 
-import Logo from "./pages/Logo";
 import Header from "./Header";
 import Now from './pages/Now';
 import Today from './pages/Today';
@@ -19,7 +18,6 @@ import DetailDust from './pages/DetailDust';
 import Image from './pages/Image';
 import Video from './pages/Video';
 import Dev from "./pages/Dev";
-import LogoPage from "./pages/Logo";
 
 import morning from './img/skyBg/morning.jpg';
 import afternoon from './img/skyBg/afternoon.jpg';
@@ -46,7 +44,6 @@ const App = () => {
     { id: 7, component: DetailDust },
     { id: 8, component: Image },
     { id: 9, component: Video },
-    { id: 10, component: LogoPage },
   ]);
 
   // 날짜 정보 GET
@@ -141,7 +138,7 @@ const App = () => {
     let pathName = Number(location?.pathname?.replaceAll('/', ''));
     let find = pageList?.find(x => x?.id === pathName);
     let pageId = find?.pageId;
-    if (pageId === 10) return setActiveBgIdx(8);
+    if (pageId >= 8) return setActiveBgIdx(8);
   
     let val = data?.now[pageId === 6 ? 'PM10_TEXT' : 'PM25_TEXT'];
     if (val === '좋음') result = 4;
@@ -169,8 +166,6 @@ const App = () => {
   // 함수 시작
   useEffect(() => startFn(), []);
   useEffect(() => pageChangeFn(), [pageList, screenType, location, data]);
-  // useEffect(() => console.log(bdList?.current[activeBgIdx]), [activeBgIdx]);
-  
 
   // JSX
   if (!data) return <UpdateMain>업데이트중..</UpdateMain>;

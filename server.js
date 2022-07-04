@@ -36,13 +36,18 @@ app.use('/api/getIp', (req, res) => {
   if (ip.indexOf('::') > -1) return res.send(ip?.split('::')[1]);
   res.end(ip);
 });
-app.use('/:id', express.static(__dirname + '/build'));
 app.get('/api/getIp', (req, res) => res.send(getClientIp(req)));
+app.use('/public/files/', express.static(__dirname + '/build/files/'));
+app.use('/:id', express.static(__dirname + '/build'));
+
+
+// POST
 app.post('/closeApp', () => ipc.emit('closeApp'));
 app.post('/reloadApp', () => ipc.emit('reloadApp'));
 app.post('/api/upload/' + conf.id, upload.fields([{ name: 'ip' }, { name: 'files' }]), (req, res) => {
   res.send({ ip: ip(req.ip), files: req.files});
 });
+
 
 // Start
 app.listen(80, () => console.log('No.' + conf.id +  'Hardware ON.'));
