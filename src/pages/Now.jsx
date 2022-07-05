@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '%/useStore';
 import useDate from '%/useDate';
-import sunIcon from '@/img/skyIcon/sun.png';
-import manyCloudIcon from '@/img/skyIcon/manyCloud.png';
-import cloudIcon from '@/img/skyIcon/cloud.png';
-import cloudSunIcon from '@/img/skyIcon/cloudSun.png';
-import rainIcon from '@/img/skyIcon/rain.png';
-import snowIcon from '@/img/skyIcon/snow.png';
-import windIcon from '@/img/skyIcon/wind.png';
+import sky_1_icon from '@/img/skyIcon/1.png';
+import sky_3_icon from '@/img/skyIcon/3.png';
+import sky_3_1_icon from '@/img/skyIcon/3-1.png';
+import sky_3_2_icon from '@/img/skyIcon/3-2.png';
+import sky_4_icon from '@/img/skyIcon/4.png';
+import sky_4_1_icon from '@/img/skyIcon/4-1.png';
+import sky_4_2_icon from '@/img/skyIcon/4-2.png';
 import dustIcon1 from '@/img/dustIcon/1.png';
 import dustIcon2 from '@/img/dustIcon/2.png';
 import dustIcon3 from '@/img/dustIcon/3.png';
@@ -41,11 +41,15 @@ export default function ({ next, item }) {
   };
 
   const SKY = useMemo(() => {
-    let val = data?.now?.SKY;
+    let val = data?.now;
     let result = null;
-    if (val === 1) result = sunIcon;
-    if (val === 3) result = cloudSunIcon;
-    if (val === 4) result = manyCloudIcon;
+    if (val?.SKY === 1) result = sky_1_icon;
+    if (val?.SKY === 3) result = sky_3_icon;
+    if (val?.SKY === 3 && (val?.PTY === 1 || val?.PTY === 2 || val?.PTY === 4 || val?.PTY === 5 || val?.PTY === 6) && val?.POP >= 50) result = sky_3_1_icon;
+    if (val?.SKY === 3 && (val?.PTY === 3 || val?.PTY === 7) && val?.POP >= 50) result = sky_3_2_icon;
+    if (val?.SKY === 4) result = sky_4_icon;
+    if (val?.SKY === 4 && (val?.PTY === 1 || val?.PTY === 2 || val?.PTY === 4 || val?.PTY === 5 || val?.PTY === 6) && val?.POP >= 50) result = sky_4_1_icon;
+    if (val?.SKY === 4 && (val?.PTY === 3 || val?.PTY === 7) && val?.POP >= 50) result = sky_4_2_icon;
     return result;
   }, [data?.now?.SKY]);
 
@@ -70,7 +74,7 @@ export default function ({ next, item }) {
     return { color, img };
   }, [data?.now?.PM25_TEXT]);
 
-  useEffect(autoNextPage, []);
+  useEffect(autoNextPage, [next, item]);
   useEffect(() => {
     nowTimeFn();
     let interval = setInterval(nowTimeFn, 500);
